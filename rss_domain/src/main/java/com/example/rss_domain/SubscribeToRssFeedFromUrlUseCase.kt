@@ -6,7 +6,7 @@ import com.example.rss_repository.RssRepository
 import com.example.rss_repository.model.RssParserErrorResponse
 import javax.inject.Inject
 
-class GetRssFeedFromUrlUseCase @Inject constructor(
+class SubscribeToRssFeedFromUrlUseCase @Inject constructor(
     private val rssRepository: RssRepository
 ) {
     suspend fun execute(url: String): Result<List<RssFeedItemData>> = runCatching {

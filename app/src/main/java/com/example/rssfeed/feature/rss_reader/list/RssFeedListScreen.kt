@@ -66,7 +66,7 @@ private fun RssListScreen(
                     RssListErrorComponent(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = Spacings.medium),
+                            .padding(horizontal = Spacings.large),
                         errorDisplay = state.connectionError,
                         onTryAgainClick = onTryAgainClick
                     )

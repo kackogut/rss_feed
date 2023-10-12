@@ -12,13 +12,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.example.rssfeed.feature.rss_reader.list.model.RssListItemDisplay
+import com.example.rssfeed.ui.utils.Spacings
 
 @Composable
 internal fun RssFeedList(list: List<RssListItemDisplay>, onClick: (String) -> Unit) {
     LazyColumn(
-        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp)
+        contentPadding = PaddingValues(horizontal = Spacings.large, vertical = Spacings.medium)
     ) {
         items(items = list, key = { it.id }) { rssListItem ->
             RssFeedListItem(item = rssListItem, onClick = onClick)
@@ -37,7 +37,7 @@ private fun RssFeedListItem(item: RssListItemDisplay, onClick: (String) -> Unit)
             color = MaterialTheme.colorScheme.onBackground
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(Spacings.small))
 
         Text(
             text = item.description,
@@ -45,7 +45,7 @@ private fun RssFeedListItem(item: RssListItemDisplay, onClick: (String) -> Unit)
             color = MaterialTheme.colorScheme.onBackground
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(Spacings.small))
 
         Divider()
     }

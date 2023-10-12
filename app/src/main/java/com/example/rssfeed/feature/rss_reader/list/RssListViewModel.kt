@@ -2,7 +2,7 @@ package com.example.rssfeed.feature.rss_reader.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rss_domain.GetRssFeedFromUrlUseCase
+import com.example.rss_domain.SubscribeToRssFeedFromUrlUseCase
 import com.example.rss_domain.model.RssFeedItemData
 import com.example.rss_domain.model.RssParseErrorData
 import com.example.rssfeed.feature.rss_reader.list.model.RssParserErrorDisplay
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class RssListViewModel @Inject constructor(
-    private val getRssFeedFromUrlUseCase: GetRssFeedFromUrlUseCase
+    private val subscribeToRssFeedFromUrlUseCase: SubscribeToRssFeedFromUrlUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<RssListState>(RssListState.Loading)
@@ -42,7 +42,7 @@ internal class RssListViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = RssListState.Loading
 
-            getRssFeedFromUrlUseCase.execute(url).fold(
+            subscribeToRssFeedFromUrlUseCase.execute(url).fold(
                 onSuccess = {
                     _feedList.emit(it)
                 },

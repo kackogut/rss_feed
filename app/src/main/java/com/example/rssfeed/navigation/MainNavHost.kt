@@ -1,6 +1,5 @@
 package com.example.rssfeed.navigation
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -29,7 +28,7 @@ private fun encodeUrlParameter(url: String) =
     URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
 
 @Composable
-fun MainNavHost(activityContext: Context) {
+fun MainNavHost() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = URL_INPUT_SCREEN) {
@@ -68,7 +67,6 @@ fun MainNavHost(activityContext: Context) {
             })
         ) { backStackEntry ->
             RssDetailsWebViewRoute(
-                activityContext = activityContext,
                 url = backStackEntry.arguments?.getString(RSS_DETAILS_ARGUMENT)
                     ?: error("Argument $RSS_DETAILS_ARGUMENT not passed to $RSS_DETAILS_WEB_VIEW"),
                 onNavigateBack = navController::popBackStack
@@ -76,5 +74,3 @@ fun MainNavHost(activityContext: Context) {
         }
     }
 }
-
-

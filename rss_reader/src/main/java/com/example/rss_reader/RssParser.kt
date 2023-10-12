@@ -1,7 +1,7 @@
 package com.example.rss_reader
 
 import com.example.rss_reader.RssParser.Companion.SUPPORTED_ENCODING
-import com.example.rss_reader.model.ParsedRssItem
+import com.example.rss_reader.model.XmlRssItem
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
@@ -18,7 +18,7 @@ interface RssParser {
      * @throws XmlPullParserException
      * @throws IOException
      */
-    fun parseInput(inputStream: InputStream): List<ParsedRssItem>
+    fun parseInput(inputStream: InputStream): List<XmlRssItem>
 
     companion object {
         const val SUPPORTED_ENCODING = "UTF-8"
@@ -26,7 +26,7 @@ interface RssParser {
 }
 
 class DefaultRssParser @Inject constructor() : RssParser {
-    override fun parseInput(inputStream: InputStream): List<ParsedRssItem> {
+    override fun parseInput(inputStream: InputStream): List<XmlRssItem> {
         inputStream.use { stream ->
             val parserFactory = XmlPullParserFactory.newInstance()
 
@@ -38,16 +38,16 @@ class DefaultRssParser @Inject constructor() : RssParser {
         }
     }
 
-    private fun readFeed(parser: XmlPullParser): List<ParsedRssItem> {
+    private fun readFeed(parser: XmlPullParser): List<XmlRssItem> {
         var eventType = parser.eventType
         var currentText = ""
-        var currentItem = ParsedRssItem()
-        val returnList = mutableListOf<ParsedRssItem>()
+        var currentItem = getNewEmptyParsedItem()
+        val returnList = mutableListOf<XmlRssItem>()
 
         while (eventType != XmlPullParser.END_DOCUMENT) {
             when (eventType) {
                 XmlPullParser.START_TAG -> {
-                    if (parser.name == TAG_NAME_ITEM) currentItem = ParsedRssItem()
+                    if (parser.name == TAG_NAME_ITEM) currentItem = getNewEmptyParsedItem()
                 }
 
                 XmlPullParser.TEXT -> {
@@ -68,6 +68,12 @@ class DefaultRssParser @Inject constructor() : RssParser {
 
         return returnList
     }
+
+    private fun getNewEmptyParsedItem() = XmlRssItem(
+        title = null,
+        description = null,
+        link = null
+    )
 
     private companion object {
         const val TAG_NAME_ITEM = "item"

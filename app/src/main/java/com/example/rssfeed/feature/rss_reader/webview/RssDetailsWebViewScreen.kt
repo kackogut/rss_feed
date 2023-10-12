@@ -1,9 +1,9 @@
 package com.example.rssfeed.feature.rss_reader.webview
 
-import android.content.Context
 import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,12 +17,10 @@ import com.example.rssfeed.ui.theme.RssFeedTheme
 @Composable
 internal fun RssDetailsWebViewRoute(
     url: String,
-    activityContext: Context,
     onNavigateBack: () -> Unit
 ) {
     RssFeedTheme {
         RssDetailsWebViewScreen(
-            activityContext = activityContext,
             url = url,
             onBackClick = onNavigateBack
         )
@@ -31,7 +29,6 @@ internal fun RssDetailsWebViewRoute(
 
 @Composable
 private fun RssDetailsWebViewScreen(
-    activityContext: Context,
     url: String,
     onBackClick: () -> Unit
 ) {
@@ -49,9 +46,10 @@ private fun RssDetailsWebViewScreen(
         AndroidView(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPaddings)
                 .clip(RectangleShape),
             factory = {
-                WebView(activityContext).apply {
+                WebView(context).apply {
                     webViewClient = RssDetailsWebViewClient(url)
 
                     settings.apply {
