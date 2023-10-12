@@ -8,6 +8,7 @@ import com.example.rss_domain.model.RssParseErrorData
 import com.example.rssfeed.feature.rss_reader.list.model.RssParserErrorDisplay
 import com.example.rssfeed.feature.rss_reader.list.model.toDisplay
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +30,8 @@ internal class RssListViewModel @Inject constructor(
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
+    private var subscriptionJob: Job? = null
+
     init {
         viewModelScope.launch {
             _feedList.collect { feedList ->
@@ -40,7 +43,9 @@ internal class RssListViewModel @Inject constructor(
     }
 
     fun getRssFeed(url: String) {
-        viewModelScope.launch {
+        subscriptionJob?.cancel()
+
+        subscriptionJob = viewModelScope.launch {
             _state.value = RssListState.Loading
 
             subscribeToRssFeedFromUrlUseCase.execute(url)
