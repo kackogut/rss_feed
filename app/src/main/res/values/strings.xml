@@ -2,4 +2,6 @@
     <string name="app_name">Rss Feed</string>
 
     <string name="button_read_rss_url_action">Read</string>
+
+    <string name="content_description_back_arrow">Navigate back</string>
 </resources>

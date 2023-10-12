@@ -4,12 +4,13 @@ import com.example.rss_reader.model.ParsedRssItem
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
+import javax.inject.Inject
 
 interface RssParser {
     fun parseInput(inputStream: InputStream): List<ParsedRssItem>
 }
 
-class DefaultRssParser : RssParser {
+class DefaultRssParser @Inject constructor() : RssParser {
     override fun parseInput(inputStream: InputStream): List<ParsedRssItem> {
         val parserFactory = XmlPullParserFactory.newInstance().apply {
             isNamespaceAware = true

@@ -18,4 +18,5 @@ include(":app")
 
 include(":rss_reader")
 
+include(":rss_domain")
 include(":rss_repository")
