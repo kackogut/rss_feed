@@ -14,6 +14,7 @@ import com.example.rssfeed.design.components.BaseToolbar
 import com.example.rssfeed.design.components.FullScreenLoading
 import com.example.rssfeed.feature.rss_reader.list.components.RssFeedList
 import com.example.rssfeed.feature.rss_reader.list.components.RssListErrorComponent
+import com.example.rssfeed.ui.theme.RssFeedTheme
 import com.example.rssfeed.ui.utils.Spacings
 
 @Composable
@@ -29,13 +30,15 @@ internal fun RssListRoute(
 
     val rssListState by rssListViewModel.state.collectAsState()
 
-    RssListScreen(
-        state = rssListState,
-        url = rssUrl,
-        onBackClick = onNavigateBack,
-        onTryAgainClick = { rssListViewModel.getRssFeed(rssUrl) },
-        onRssItemClick = onRssItemClick
-    )
+    RssFeedTheme {
+        RssListScreen(
+            state = rssListState,
+            url = rssUrl,
+            onBackClick = onNavigateBack,
+            onTryAgainClick = { rssListViewModel.getRssFeed(rssUrl) },
+            onRssItemClick = onRssItemClick
+        )
+    }
 }
 
 @Composable
