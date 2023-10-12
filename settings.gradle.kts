@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Rss Feed"
 include(":app")
+include(":rss_reader")
