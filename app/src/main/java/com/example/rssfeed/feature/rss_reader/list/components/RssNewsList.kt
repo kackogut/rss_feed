@@ -1,5 +1,6 @@
 package com.example.rssfeed.feature.rss_reader.list.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -15,19 +16,21 @@ import androidx.compose.ui.unit.dp
 import com.example.rssfeed.feature.rss_reader.list.model.RssListItemDisplay
 
 @Composable
-internal fun RssFeedList(list: List<RssListItemDisplay>) {
+internal fun RssFeedList(list: List<RssListItemDisplay>, onClick: (String) -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp)
     ) {
         items(items = list, key = { it.id }) { rssListItem ->
-            RssFeedListItem(rssListItem)
+            RssFeedListItem(item = rssListItem, onClick = onClick)
         }
     }
 }
 
 @Composable
-private fun RssFeedListItem(item: RssListItemDisplay) {
-    Column {
+private fun RssFeedListItem(item: RssListItemDisplay, onClick: (String) -> Unit) {
+    Column(
+        modifier = Modifier.clickable { onClick(item.url) }
+    ) {
         Text(
             text = item.title,
             style = MaterialTheme.typography.titleMedium,

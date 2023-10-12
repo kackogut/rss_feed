@@ -28,7 +28,7 @@ class DefaultRssReader @Inject constructor(
             } catch (exception: XmlPullParserException) {
                 throw RssParserError.ParsingError
             } catch (exception: IOException) {
-                throw RssParserError.ParsingError
+                throw RssParserError.ConnectionError
             }
 
         }

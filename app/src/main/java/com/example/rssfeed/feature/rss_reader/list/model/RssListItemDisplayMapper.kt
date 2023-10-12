@@ -5,5 +5,6 @@ import com.example.rss_domain.model.RssFeedItemData
 internal fun RssFeedItemData.toDisplay(id: Int) = RssListItemDisplay(
     id = id,
     title = title,
-    description = description
+    description = description,
+    url = url
 )

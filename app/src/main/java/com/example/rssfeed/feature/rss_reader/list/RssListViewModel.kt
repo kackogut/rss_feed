@@ -40,6 +40,8 @@ internal class RssListViewModel @Inject constructor(
 
     fun getRssFeed(url: String) {
         viewModelScope.launch {
+            _state.value = RssListState.Loading
+
             getRssFeedFromUrlUseCase.execute(url).fold(
                 onSuccess = {
                     _feedList.emit(it)

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -19,9 +20,12 @@ import com.example.rssfeed.feature.rss_reader.list.components.RssListErrorCompon
 internal fun RssListRoute(
     rssListViewModel: RssListViewModel = hiltViewModel(),
     rssUrl: String,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onRssItemClick: (String) -> Unit
 ) {
-    rssListViewModel.getRssFeed(rssUrl)
+    LaunchedEffect(rssUrl) {
+        rssListViewModel.getRssFeed(rssUrl)
+    }
 
     val rssListState by rssListViewModel.state.collectAsState()
 
@@ -29,7 +33,8 @@ internal fun RssListRoute(
         state = rssListState,
         url = rssUrl,
         onBackClick = onNavigateBack,
-        onTryAgainClick = { rssListViewModel.getRssFeed(rssUrl) }
+        onTryAgainClick = { rssListViewModel.getRssFeed(rssUrl) },
+        onRssItemClick = onRssItemClick
     )
 }
 
@@ -38,7 +43,8 @@ private fun RssListScreen(
     state: RssListState,
     url: String,
     onBackClick: () -> Unit,
-    onTryAgainClick: () -> Unit
+    onTryAgainClick: () -> Unit,
+    onRssItemClick: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -53,7 +59,7 @@ private fun RssListScreen(
         ) {
             when (state) {
                 is RssListState.Data -> {
-                    RssFeedList(list = state.list)
+                    RssFeedList(list = state.list, onClick = onRssItemClick)
                 }
 
                 is RssListState.Error -> {
