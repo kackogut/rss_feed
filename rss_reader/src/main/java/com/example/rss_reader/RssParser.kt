@@ -1,5 +1,6 @@
 package com.example.rss_reader
 
+import com.example.rss_reader.RssParser.Companion.SUPPORTED_ENCODING
 import com.example.rss_reader.model.ParsedRssItem
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
@@ -13,22 +14,24 @@ import javax.inject.Inject
 interface RssParser {
     /**
      * Parse given stream which should contain valid XML structure
-     * @param inputStream - RSS input stream that will be parsed
+     * @param inputStream - RSS input stream encoded with [SUPPORTED_ENCODING]
      * @throws XmlPullParserException
      * @throws IOException
      */
     fun parseInput(inputStream: InputStream): List<ParsedRssItem>
+
+    companion object {
+        const val SUPPORTED_ENCODING = "UTF-8"
+    }
 }
 
 class DefaultRssParser @Inject constructor() : RssParser {
     override fun parseInput(inputStream: InputStream): List<ParsedRssItem> {
         inputStream.use { stream ->
-            val parserFactory = XmlPullParserFactory.newInstance().apply {
-                isNamespaceAware = true
-            }
+            val parserFactory = XmlPullParserFactory.newInstance()
 
             val parser = parserFactory.newPullParser().apply {
-                setInput(stream, null)
+                setInput(stream, SUPPORTED_ENCODING)
             }
 
             return readFeed(parser)

@@ -52,4 +52,11 @@ object RssTestData {
             "\t\t\t</item>\n" +
             "\t\t</channel>\n" +
             "</rss>"
+
+    val invalidTestRssInput = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n" +
+            "\t>\n" +
+            "\n" +
+            "<channel>\n" +
+            "\t<title>TechCrunch<title>\n" +
+            "</rss>"
 }

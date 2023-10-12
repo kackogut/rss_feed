@@ -9,12 +9,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.rssfeed.design.components.BaseToolbar
 import com.example.rssfeed.design.components.FullScreenLoading
 import com.example.rssfeed.feature.rss_reader.list.components.RssFeedList
 import com.example.rssfeed.feature.rss_reader.list.components.RssListErrorComponent
+import com.example.rssfeed.ui.utils.Spacings
 
 @Composable
 internal fun RssListRoute(
@@ -66,7 +66,7 @@ private fun RssListScreen(
                     RssListErrorComponent(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = 24.dp),
+                            .padding(horizontal = Spacings.medium),
                         errorDisplay = state.connectionError,
                         onTryAgainClick = onTryAgainClick
                     )

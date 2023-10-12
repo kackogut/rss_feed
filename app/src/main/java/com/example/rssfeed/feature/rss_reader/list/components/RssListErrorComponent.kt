@@ -12,9 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.example.rssfeed.R
 import com.example.rssfeed.feature.rss_reader.list.model.RssParserErrorDisplay
+import com.example.rssfeed.ui.utils.Spacings
 
 @Composable
 internal fun RssListErrorComponent(
@@ -33,7 +33,7 @@ internal fun RssListErrorComponent(
             color = MaterialTheme.colorScheme.error
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(Spacings.small))
 
         Text(
             text = stringResource(id = errorDisplay.errorDescriptionResource),
@@ -42,7 +42,7 @@ internal fun RssListErrorComponent(
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(Spacings.medium))
 
         Button(onClick = onTryAgainClick) {
             Text(text = stringResource(id = R.string.button_try_again_action))

@@ -17,11 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rssfeed.R
 import com.example.rssfeed.ui.theme.RssFeedTheme
+import com.example.rssfeed.ui.utils.Spacings
 
 @Composable
 internal fun RssInputRoute(
@@ -60,7 +60,7 @@ private fun RssUrlInputScreen(
                 onValueChange = onUrlTextChange
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(Spacings.medium))
 
             Button(
                 onClick = onReadButtonClick,
