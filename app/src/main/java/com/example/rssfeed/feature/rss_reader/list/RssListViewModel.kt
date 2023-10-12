@@ -12,6 +12,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,17 +43,16 @@ internal class RssListViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = RssListState.Loading
 
-            subscribeToRssFeedFromUrlUseCase.execute(url).fold(
-                onSuccess = {
-                    _feedList.emit(it)
-                },
-                onFailure = { error ->
+            subscribeToRssFeedFromUrlUseCase.execute(url)
+                .catch { error ->
                     val displayError = (error as? RssParseErrorData)?.toDisplay()
                         ?: RssParserErrorDisplay.UnknownError
 
                     _state.value = RssListState.Error(displayError)
                 }
-            )
+                .collect {
+                    _feedList.emit(it)
+                }
         }
     }
 }
