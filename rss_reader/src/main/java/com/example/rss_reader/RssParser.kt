@@ -2,11 +2,21 @@ package com.example.rss_reader
 
 import com.example.rss_reader.model.ParsedRssItem
 import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
 import javax.inject.Inject
 
+/**
+ * Class that allows to parse XML input to response models
+ */
 interface RssParser {
+    /**
+     * Parse given stream which should contain valid XML structure
+     * @param inputStream - RSS input stream that will be parsed
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
     fun parseInput(inputStream: InputStream): List<ParsedRssItem>
 }
 

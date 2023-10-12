@@ -10,7 +10,15 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.inject.Inject
 
+/**
+ * Class which allows to fetch and parse RSS feed
+ */
 interface RssReader {
+    /**
+     * Fetch and parse Rss from given website
+     * @param url - website url from which rss feed will be fetched and parsed
+     * @throws RssParserError - in case of connection or parsing issue
+     */
     suspend fun fetchRss(url: String): List<ParsedRssItem>
 }
 
@@ -20,9 +28,6 @@ class DefaultRssReader @Inject constructor(
 
     override suspend fun fetchRss(url: String) = withContext(Dispatchers.IO) {
         (URL(url).openConnection() as? HttpURLConnection)?.run {
-            requestMethod = "GET"
-            doOutput = true
-
             try {
                 return@withContext rssParser.parseInput(inputStream)
             } catch (exception: XmlPullParserException) {

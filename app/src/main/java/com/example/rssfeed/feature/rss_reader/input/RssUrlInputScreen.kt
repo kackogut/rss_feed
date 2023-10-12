@@ -74,7 +74,7 @@ private fun RssUrlInputScreen(
 
 @Composable
 @Preview
-private fun EmptyRrsInputScreenPreview() {
+private fun EmptyRssInputScreenPreview() {
     RssFeedTheme {
         RssUrlInputScreen(
             rssInputState = RssInputState.DEFAULT,
