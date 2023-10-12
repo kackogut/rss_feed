@@ -1,11 +1,11 @@
 plugins {
-    kotlin("kapt")
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
 }
 
 android {
-    namespace = "com.example.rss_reader"
+    namespace = "com.example.rss_repository"
     compileSdk = 34
 
     defaultConfig {
@@ -34,14 +34,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":rss_reader"))
+
     implementation(libs.androidx.ktx)
+
+    implementation(libs.coroutines)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
-    implementation(libs.coroutines)
-
     testImplementation(libs.junit)
-    testImplementation("net.sf.kxml:kxml2:2.3.0")
-
 }

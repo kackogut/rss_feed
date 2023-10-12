@@ -5,12 +5,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.inject.Inject
 
 interface RssReader {
     suspend fun fetchRss(url: String): List<ParsedRssItem>
 }
 
-internal class DefaultRssReader(
+class DefaultRssReader @Inject constructor(
     private val rssParser: RssParser
 ) : RssReader {
 

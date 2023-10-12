@@ -5,11 +5,11 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
 
-internal interface RssParser {
+interface RssParser {
     fun parseInput(inputStream: InputStream): List<ParsedRssItem>
 }
 
-internal class DefaultRssParser : RssParser {
+class DefaultRssParser : RssParser {
     override fun parseInput(inputStream: InputStream): List<ParsedRssItem> {
         val parserFactory = XmlPullParserFactory.newInstance().apply {
             isNamespaceAware = true
