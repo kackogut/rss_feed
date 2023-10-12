@@ -1,5 +1,6 @@
-package com.example.rssfeed.feature.input
+package com.example.rssfeed.feature.rss_reader.input
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,11 +30,13 @@ internal fun RssInputRoute(
 ) {
     val rssInputState by rssInputViewModel.state.collectAsStateWithLifecycle()
 
-    RssUrlInputScreen(
-        rssInputState = rssInputState,
-        onUrlTextChange = rssInputViewModel::onTextChange,
-        onReadButtonClick = { navigateToRssList.invoke(rssInputState.urlInputText) }
-    )
+    RssFeedTheme {
+        RssUrlInputScreen(
+            rssInputState = rssInputState,
+            onUrlTextChange = rssInputViewModel::onTextChange,
+            onReadButtonClick = { navigateToRssList.invoke(rssInputState.urlInputText) }
+        )
+    }
 }
 
 @Composable
@@ -84,6 +87,21 @@ private fun EmptyRrsInputScreenPreview() {
 @Composable
 @Preview
 private fun TextInputScreenPreview() {
+    RssFeedTheme {
+        RssUrlInputScreen(
+            rssInputState = RssInputState(
+                urlInputText = "input.com",
+                readButtonEnabled = true
+            ),
+            onUrlTextChange = {},
+            onReadButtonClick = {}
+        )
+    }
+}
+
+@Composable
+@Preview(uiMode = UI_MODE_NIGHT_YES)
+private fun TextInputScreenDarkModelPreview() {
     RssFeedTheme {
         RssUrlInputScreen(
             rssInputState = RssInputState(

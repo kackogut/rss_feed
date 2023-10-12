@@ -1,4 +1,4 @@
-package com.example.rssfeed.feature.input
+package com.example.rssfeed.feature.rss_reader.input
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

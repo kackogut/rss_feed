@@ -1,5 +1,7 @@
 package com.example.rssfeed.feature.input
 
+import com.example.rssfeed.feature.rss_reader.input.RssInputState
+import com.example.rssfeed.feature.rss_reader.input.RssInputViewModel
 import org.junit.Before
 import org.junit.Test
 
