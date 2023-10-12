@@ -2,6 +2,12 @@
     <string name="app_name">Rss Feed</string>
 
     <string name="button_read_rss_url_action">Read</string>
+    <string name="button_try_again_action">Try again</string>
 
     <string name="content_description_back_arrow">Navigate back</string>
+
+    <string name="error_title_failed_to_load_items">Failed to load items</string>
+    <string name="error_label_connection_error">Error when connecting to the URL, please check your internet connection and try again</string>
+    <string name="error_label_parsing_error">Error when parsing site document, please make sure that website is valid RRS feed</string>
+    <string name="error_label_unknown_error">Unknown error, please try again later</string>
 </resources>

@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rss_domain.GetRssFeedFromUrlUseCase
 import com.example.rss_domain.model.RssFeedItemData
+import com.example.rss_domain.model.RssParseErrorData
+import com.example.rssfeed.feature.rss_reader.list.model.RssParserErrorDisplay
 import com.example.rssfeed.feature.rss_reader.list.model.toDisplay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.BufferOverflow
@@ -14,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RssListViewModel @Inject constructor(
+internal class RssListViewModel @Inject constructor(
     private val getRssFeedFromUrlUseCase: GetRssFeedFromUrlUseCase
 ) : ViewModel() {
 
@@ -42,7 +44,12 @@ class RssListViewModel @Inject constructor(
                 onSuccess = {
                     _feedList.emit(it)
                 },
-                onFailure = {}
+                onFailure = { error ->
+                    val displayError = (error as? RssParseErrorData)?.toDisplay()
+                        ?: RssParserErrorDisplay.UnknownError
+
+                    _state.value = RssListState.Error(displayError)
+                }
             )
         }
     }

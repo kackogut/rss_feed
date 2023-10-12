@@ -12,14 +12,20 @@ interface RssParser {
 
 class DefaultRssParser @Inject constructor() : RssParser {
     override fun parseInput(inputStream: InputStream): List<ParsedRssItem> {
-        val parserFactory = XmlPullParserFactory.newInstance().apply {
-            isNamespaceAware = true
-        }
+        inputStream.use { stream ->
+            val parserFactory = XmlPullParserFactory.newInstance().apply {
+                isNamespaceAware = true
+            }
 
-        val parser = parserFactory.newPullParser().apply {
-            setInput(inputStream, null)
-        }
+            val parser = parserFactory.newPullParser().apply {
+                setInput(stream, null)
+            }
 
+            return readFeed(parser)
+        }
+    }
+
+    private fun readFeed(parser: XmlPullParser): List<ParsedRssItem> {
         var eventType = parser.eventType
         var currentText = ""
         var currentItem = ParsedRssItem()

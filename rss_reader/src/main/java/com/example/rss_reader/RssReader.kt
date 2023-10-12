@@ -1,8 +1,11 @@
 package com.example.rss_reader
 
 import com.example.rss_reader.model.ParsedRssItem
+import com.example.rss_reader.model.RssParserError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.xmlpull.v1.XmlPullParserException
+import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 import javax.inject.Inject
@@ -19,9 +22,17 @@ class DefaultRssReader @Inject constructor(
         (URL(url).openConnection() as? HttpURLConnection)?.run {
             requestMethod = "GET"
             doOutput = true
-            return@withContext rssParser.parseInput(inputStream)
+
+            try {
+                return@withContext rssParser.parseInput(inputStream)
+            } catch (exception: XmlPullParserException) {
+                throw RssParserError.ParsingError
+            } catch (exception: IOException) {
+                throw RssParserError.ParsingError
+            }
+
         }
 
-        throw Exception()
+        throw RssParserError.ConnectionError
     }
 }
