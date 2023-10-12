@@ -53,17 +53,18 @@ android {
 
 dependencies {
     implementation(libs.androidx.ktx)
+    implementation(libs.androidx.lifecycle)
 
     implementation(libs.compose.activity)
+    implementation(libs.compose.navigation)
     implementation(platform(libs.compose.bom))
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.graphics)
-    implementation(libs.compose.material3)
-    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.bundles.compose)
 
     implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
     kapt(libs.hilt.android.compiler)
 
     testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
     androidTestImplementation(libs.junit.ext)
 }
