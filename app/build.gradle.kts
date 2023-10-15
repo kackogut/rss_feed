@@ -53,6 +53,8 @@ android {
 
 dependencies {
     implementation(project(":rss_domain"))
+    implementation(project(":rss_domain_data"))
+    implementation(project(":rss_domain_test"))
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.lifecycle)

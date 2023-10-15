@@ -2,7 +2,9 @@ package com.example.rssfeed.feature.rss_reader.list
 
 import com.example.rss_domain.SubscribeToRssFeedFromUrlUseCase
 import com.example.rss_domain.model.RssParseErrorData
+import com.example.rss_domain_test.model.RssFeedItemDataGenerator
 import com.example.rssfeed.feature.rss_reader.list.model.RssParserErrorDisplay
+import com.example.rssfeed.feature.rss_reader.model.RssDisplayMapperUtils
 import com.example.rssfeed.utils.MainCoroutineRule
 import com.example.rssfeed.utils.assertStateFlowValues
 import io.mockk.every
@@ -64,7 +66,12 @@ internal class RssListViewModelTest {
     fun `GIVEN that for given URL subscription returns rss list WHEN viewModel is initialized THEN should post Data state`() =
         runTest {
             val url = "url"
-            every { subscribeToRssFeedFromUrlUseCase.execute(url) } returns flowOf()
+            val domainModel = RssFeedItemDataGenerator.rssListItemData()
+            every { subscribeToRssFeedFromUrlUseCase.execute(url) } returns flowOf(
+                listOf(
+                    domainModel
+                )
+            )
 
             assertStateFlowValues(
                 stateFlow = viewModel.state,
@@ -73,8 +80,13 @@ internal class RssListViewModelTest {
                     assert(states[0] == RssListState.Loading)
 
                     assert(
-                        states[1] == RssListState.Error(
-                            connectionError = RssParserErrorDisplay.ConnectionError
+                        states[1] == RssListState.Data(
+                            list = listOf(
+                                RssDisplayMapperUtils.expectedListItemFromDomainModel(
+                                    domainModel = domainModel,
+                                    id = 0
+                                )
+                            )
                         )
                     )
                 }

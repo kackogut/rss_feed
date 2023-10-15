@@ -14,7 +14,7 @@ import javax.inject.Inject
 class SubscribeToRssFeedFromUrlUseCase @Inject constructor(
     private val rssRepository: RssRepository
 ) {
-    suspend fun execute(url: String): Flow<List<RssFeedItemData>> = flow {
+    fun execute(url: String): Flow<List<RssFeedItemData>> = flow {
         while (currentCoroutineContext().isActive) {
             try {
                 emit(rssRepository.parseRssUrl(url).map { it.toDomainModel() })
