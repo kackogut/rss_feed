@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -21,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rssfeed.R
 import com.example.rssfeed.ui.theme.RssFeedTheme
+import com.example.rssfeed.ui.utils.Sizes
 import com.example.rssfeed.ui.utils.Spacings
 
 @Composable
@@ -51,18 +53,25 @@ private fun RssUrlInputScreen(
         Column(
             modifier = Modifier
                 .padding(innerPaddings)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(horizontal = Spacings.large),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = rssInputState.urlInputText,
+                singleLine = true,
+                label = { Text(stringResource(R.string.hint_url_input)) },
                 onValueChange = onUrlTextChange
             )
 
-            Spacer(modifier = Modifier.height(Spacings.medium))
+            Spacer(modifier = Modifier.height(Spacings.large))
 
             Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(Sizes.defaultButtonSize),
                 onClick = onReadButtonClick,
                 enabled = rssInputState.readButtonEnabled
             ) {

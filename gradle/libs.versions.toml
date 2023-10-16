@@ -50,8 +50,7 @@ truth = { module = "com.google.truth:truth", version.ref = "truth" }
 compose = [
     "compose-ui",
     "compose-ui-graphics",
-    "compose-material3",
-    "compose-ui-tooling-preview"
+    "compose-material3"
 ]
 unitTest = [
     "junit",

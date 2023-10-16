@@ -1,5 +1,6 @@
 package com.example.rssfeed.feature.rss_reader.webview
 
+import android.content.res.Configuration
 import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.rssfeed.design.components.BaseToolbar
 import com.example.rssfeed.ui.theme.RssFeedTheme
@@ -70,6 +72,27 @@ private fun RssDetailsWebViewScreen(
                     )
                 }
             }
+        )
+    }
+}
+
+@Composable
+private fun RssDetailsWebViewScreenPreview() {
+    RssFeedTheme {
+        RssDetailsWebViewScreen(
+            url = "https://url.com",
+            onBackClick = {}
+        )
+    }
+}
+
+@Composable
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+private fun RssDetailsWebViewScreenDarkPreview() {
+    RssFeedTheme {
+        RssDetailsWebViewScreen(
+            url = "https://url.com",
+            onBackClick = {}
         )
     }
 }
