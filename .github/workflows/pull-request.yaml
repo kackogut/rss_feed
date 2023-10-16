@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Pull Requests check
-    runs-on: ubuntu-latest
+    runs-on: mac-latest
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3
