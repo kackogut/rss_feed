@@ -50,7 +50,7 @@ private fun RssDetailsWebViewScreen(
                 .clip(RectangleShape),
             factory = {
                 WebView(context).apply {
-                    webViewClient = RssDetailsWebViewClient(url)
+                    webViewClient = RssDetailsWebViewClient()
 
                     settings.apply {
                         javaScriptEnabled = true
