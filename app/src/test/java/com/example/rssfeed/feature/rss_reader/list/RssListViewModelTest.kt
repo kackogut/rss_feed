@@ -72,9 +72,7 @@ internal class RssListViewModelTest {
             val url = "url"
             val domainModel = RssFeedItemDataGenerator.rssListItemData()
             every { subscribeToRssFeedFromUrlUseCase.execute(url) } returns flowOf(
-                listOf(
-                    domainModel
-                )
+                Result.success(listOf(domainModel))
             )
 
             assertStateFlowValues(
@@ -107,11 +105,11 @@ internal class RssListViewModelTest {
             )
 
             every { subscribeToRssFeedFromUrlUseCase.execute(url) } returns flow {
-                emit(listOf(domainModel))
+                emit(Result.success(listOf(domainModel)))
 
                 delay(5000)
 
-                emit(listOf(domainModel, secondDomainModel))
+                emit(Result.success(listOf(domainModel, secondDomainModel)))
             }
 
             assertStateFlowValues(
@@ -158,7 +156,7 @@ internal class RssListViewModelTest {
             val domainModel = RssFeedItemDataGenerator.rssListItemData()
 
             every { subscribeToRssFeedFromUrlUseCase.execute(url) } returns flow {
-                emit(listOf(domainModel))
+                emit(Result.success(listOf(domainModel)))
 
                 delay(5000)
 

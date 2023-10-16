@@ -14,12 +14,12 @@ import javax.inject.Inject
 class SubscribeToRssFeedFromUrlUseCase @Inject constructor(
     private val rssRepository: RssRepository
 ) {
-    fun execute(url: String): Flow<List<RssFeedItemData>> = flow {
+    fun execute(url: String): Flow<Result<List<RssFeedItemData>>> = flow {
         while (currentCoroutineContext().isActive) {
             try {
-                emit(rssRepository.parseRssUrl(url).map { it.toDomainModel() })
+                emit(Result.success(rssRepository.parseRssUrl(url).map { it.toDomainModel() }))
             } catch (exception: RssParserErrorResponse) {
-                throw exception.toDomainModel()
+                emit(Result.failure(exception.toDomainModel()))
             }
 
             delay(REFRESH_DELAY_IN_MILLISECONDS)
