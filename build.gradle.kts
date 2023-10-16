@@ -1,7 +1,18 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id("com.android.application") version "8.1.0" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.10" apply false
-    id("com.android.library") version "8.1.0" apply false
-    id("com.google.dagger.hilt.android") version "2.48.1" apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.detekt)
+}
+
+allprojects {
+    apply(plugin = "io.gitlab.arturbosch.detekt")
+
+    detekt {
+        config = files("$rootDir/build-logic/quality/detekt/detekt-config.yml")
+        baseline = file("$rootDir/build-logic/quality/detekt/baseline.xml")
+        ignoreFailures = true
+    }
 }

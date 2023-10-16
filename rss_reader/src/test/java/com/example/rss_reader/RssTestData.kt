@@ -1,7 +1,7 @@
 package com.example.rss_reader
 
 object RssTestData {
-    val testRssInput = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n" +
+    const val testRssInput = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n" +
             "\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n" +
             "\txmlns:wfw=\"http://wellformedweb.org/CommentAPI/\"\n" +
             "\txmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n" +
@@ -53,10 +53,11 @@ object RssTestData {
             "\t\t</channel>\n" +
             "</rss>"
 
-    val invalidTestRssInput = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n" +
-            "\t>\n" +
-            "\n" +
-            "<channel>\n" +
-            "\t<title>TechCrunch<title>\n" +
-            "</rss>"
+    const val invalidTestRssInput =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n" +
+                "\t>\n" +
+                "\n" +
+                "<channel>\n" +
+                "\t<title>TechCrunch<title>\n" +
+                "</rss>"
 }

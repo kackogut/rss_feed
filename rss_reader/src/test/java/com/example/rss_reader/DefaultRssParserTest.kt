@@ -1,12 +1,22 @@
 package com.example.rss_reader
 
+import com.example.rss_reader.html.HtmlWrapper
 import com.example.rss_reader.model.XmlRssItem
+import com.google.common.truth.Truth.assertThat
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Test
 import org.xmlpull.v1.XmlPullParserException
 
 internal class DefaultRssParserTest {
+
+    private val htmlWrapper = mockk<HtmlWrapper> {
+        every { parseHtmlText(any()) } answers { firstArg() }
+    }
+
     private val defaultRssParser by lazy {
-        DefaultRssParser()
+        DefaultRssParser(htmlWrapper)
     }
 
     @Test
@@ -20,7 +30,7 @@ internal class DefaultRssParserTest {
 
         val parsedItems = defaultRssParser.parseInput(inputStream)
 
-        assert(expectedItem == parsedItems[0])
+        assertThat(expectedItem).isEqualTo(parsedItems[0])
     }
 
     @Test(expected = XmlPullParserException::class)
@@ -34,6 +44,21 @@ internal class DefaultRssParserTest {
 
         val parsedItems = defaultRssParser.parseInput(inputStream)
 
-        assert(expectedItem == parsedItems[0])
+        assertThat(expectedItem).isEqualTo(parsedItems[0])
+    }
+
+    @Test
+    fun `Should parse XML only item description and title with HTML wrapper`() {
+        val title = "“thousands” of pieces of content removed"
+        val description = "This is the description"
+        val url = "https://this.is.link.com"
+
+        val inputStream = RssTestData.testRssInput.byteInputStream()
+
+        defaultRssParser.parseInput(inputStream)
+
+        verify { htmlWrapper.parseHtmlText(title) }
+        verify { htmlWrapper.parseHtmlText(description) }
+        verify(exactly = 0) { htmlWrapper.parseHtmlText(url) }
     }
 }

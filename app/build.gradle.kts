@@ -53,6 +53,8 @@ android {
 
 dependencies {
     implementation(project(":rss_domain"))
+    implementation(project(":rss_domain_data"))
+    testImplementation(project(":rss_domain_test"))
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.lifecycle)
@@ -61,12 +63,12 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
+    debugImplementation(libs.compose.ui.tooling.preview)
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     kapt(libs.hilt.android.compiler)
 
-    testImplementation(libs.junit)
+    testImplementation(libs.bundles.unitTest)
     testImplementation(libs.coroutines.test)
-    androidTestImplementation(libs.junit.ext)
 }

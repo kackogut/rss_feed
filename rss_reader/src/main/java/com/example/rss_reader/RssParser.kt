@@ -1,6 +1,7 @@
 package com.example.rss_reader
 
 import com.example.rss_reader.RssParser.Companion.SUPPORTED_ENCODING
+import com.example.rss_reader.html.HtmlWrapper
 import com.example.rss_reader.model.XmlRssItem
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
@@ -25,7 +26,10 @@ interface RssParser {
     }
 }
 
-class DefaultRssParser @Inject constructor() : RssParser {
+class DefaultRssParser @Inject constructor(
+    private val htmlWrapper: HtmlWrapper
+) : RssParser {
+
     override fun parseInput(inputStream: InputStream): List<XmlRssItem> {
         inputStream.use { stream ->
             val parserFactory = XmlPullParserFactory.newInstance()
@@ -57,9 +61,9 @@ class DefaultRssParser @Inject constructor() : RssParser {
                 XmlPullParser.END_TAG -> {
                     when (parser.name) {
                         TAG_NAME_ITEM -> returnList += currentItem
-                        TAG_NAME_TITLE -> currentItem.title = currentText
+                        TAG_NAME_TITLE -> currentItem.title = parseHtmlText(currentText)
                         TAG_NAME_LINK -> currentItem.link = currentText
-                        TAG_NAME_DESCRIPTION -> currentItem.description = currentText
+                        TAG_NAME_DESCRIPTION -> currentItem.description = parseHtmlText(currentText)
                     }
                 }
             }
@@ -68,6 +72,8 @@ class DefaultRssParser @Inject constructor() : RssParser {
 
         return returnList
     }
+
+    private fun parseHtmlText(text: String): String = htmlWrapper.parseHtmlText(text)
 
     private fun getNewEmptyParsedItem() = XmlRssItem(
         title = null,

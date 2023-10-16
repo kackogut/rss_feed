@@ -41,6 +41,6 @@ dependencies {
 
     implementation(libs.coroutines)
 
-    testImplementation(libs.junit)
+    testImplementation(libs.bundles.unitTest)
     testImplementation("net.sf.kxml:kxml2:2.3.0")
 }

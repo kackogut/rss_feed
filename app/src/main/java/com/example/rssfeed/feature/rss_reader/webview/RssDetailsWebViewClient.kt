@@ -8,17 +8,13 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 
 /**
- * Since WebView with enabled JavaScript can bring security issues,
- * this client allows only https communication and disallow file access
- * @param allowedUrl - url to which client would only allow communication
+ * WebView client which only allows SSL secure communication and disallow file access.
+ * It also cancels all requests which receives SSL errors
  */
-class RssDetailsWebViewClient(
-    private val allowedUrl: String
-) : WebViewClient() {
+class RssDetailsWebViewClient : WebViewClient() {
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
         return when {
             request.url.toString().startsWith("file://") -> true
-            request.url.toString() != allowedUrl -> true
             request.url.scheme?.startsWith("https") == true -> false
             else -> true
         }

@@ -35,6 +35,8 @@ android {
 
 dependencies {
     implementation(project(":rss_repository"))
+    implementation(project(":rss_domain_data"))
+    testImplementation(project(":rss_domain_test"))
 
     implementation(libs.androidx.ktx)
 
@@ -43,5 +45,6 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
-    testImplementation(libs.junit)
+    testImplementation(libs.bundles.unitTest)
+    testImplementation(libs.coroutines.test)
 }
