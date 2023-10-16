@@ -118,7 +118,7 @@ internal class RssListViewModelTest {
                 stateFlow = viewModel.state,
                 checkBlock = { viewModel.getRssFeed(url) },
                 assertBlock = { states ->
-                    assert(states[0] == RssListState.Loading)
+                    assertThat(states[0]).isEqualTo(RssListState.Loading)
 
                     assertThat(states[1]).isEqualTo(
                         RssListState.Data(
@@ -169,7 +169,7 @@ internal class RssListViewModelTest {
                 stateFlow = viewModel.state,
                 checkBlock = { viewModel.getRssFeed(url) },
                 assertBlock = { states ->
-                    assert(states[0] == RssListState.Loading)
+                    assertThat(states[0]).isEqualTo(RssListState.Loading)
 
                     assertThat(states[1]).isEqualTo(
                         RssListState.Data(

@@ -51,7 +51,6 @@ compose = [
 unitTest = [
     "junit",
     "junit-ext",
-    "coroutines-test",
-    "mockk",
-    "truth"
+    "truth",
+    "mockk"
 ]

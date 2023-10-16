@@ -1,5 +1,6 @@
 package com.example.rssfeed.feature.rss_reader.input
 
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 
@@ -14,28 +15,35 @@ class RssInputViewModelTest {
 
     @Test
     fun `WHEN ViewModel is initialzed THEN should post valid default state`() {
-        val expectedState = RssInputState(urlInputText = "", readButtonEnabled = false)
-
-        val viewModelState = viewModel.state.value
-
-        assert(expectedState == viewModelState)
+        assertThat(viewModel.state.value).isEqualTo(
+            RssInputState(
+                urlInputText = "",
+                readButtonEnabled = false
+            )
+        )
     }
 
     @Test
     fun `WHEN text is changed to empty text THEN should post disabled state`() {
         viewModel.onTextChange(" ")
 
-        val expectedState = RssInputState(urlInputText = " ", readButtonEnabled = false)
-
-        assert(expectedState == viewModel.state.value)
+        assertThat(viewModel.state.value).isEqualTo(
+            RssInputState(
+                urlInputText = " ",
+                readButtonEnabled = false
+            )
+        )
     }
 
     @Test
     fun `WHEN text is changed to non-empty text THEN should post enabled state`() {
         viewModel.onTextChange("test")
 
-        val expectedState = RssInputState(urlInputText = "test", readButtonEnabled = true)
-
-        assert(expectedState == viewModel.state.value)
+        assertThat(viewModel.state.value).isEqualTo(
+            RssInputState(
+                urlInputText = "test",
+                readButtonEnabled = true
+            )
+        )
     }
 }

@@ -1,7 +1,7 @@
 package com.example.rss_reader
 
-import android.text.Html
 import com.example.rss_reader.RssParser.Companion.SUPPORTED_ENCODING
+import com.example.rss_reader.html.HtmlWrapper
 import com.example.rss_reader.model.XmlRssItem
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
@@ -26,7 +26,10 @@ interface RssParser {
     }
 }
 
-class DefaultRssParser @Inject constructor() : RssParser {
+class DefaultRssParser @Inject constructor(
+    private val htmlWrapper: HtmlWrapper
+) : RssParser {
+
     override fun parseInput(inputStream: InputStream): List<XmlRssItem> {
         inputStream.use { stream ->
             val parserFactory = XmlPullParserFactory.newInstance()
@@ -70,9 +73,7 @@ class DefaultRssParser @Inject constructor() : RssParser {
         return returnList
     }
 
-    private fun parseHtmlText(text: String): String {
-        return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY).toString()
-    }
+    private fun parseHtmlText(text: String): String = htmlWrapper.parseHtmlText(text)
 
     private fun getNewEmptyParsedItem() = XmlRssItem(
         title = null,
