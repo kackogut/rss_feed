@@ -11,5 +11,6 @@
     <string name="error_title_failed_to_load_items">Failed to load items</string>
     <string name="error_label_connection_error">Error when connecting to the URL, please check your internet connection and try again</string>
     <string name="error_label_parsing_error">Error when parsing site document, please make sure that website is valid RRS feed</string>
+    <string name="error_label_invalid_url">Invalid URL, please make sure that URL starts with "https://"</string>
     <string name="error_label_unknown_error">Unknown error, please try again later</string>
 </resources>

@@ -8,6 +8,7 @@ import kotlinx.coroutines.withContext
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.net.MalformedURLException
 import java.net.URL
 import javax.inject.Inject
 
@@ -29,7 +30,7 @@ class DefaultRssReader @Inject constructor(
 ) : RssReader {
 
     override suspend fun fetchRss(url: String) = withContext(Dispatchers.IO) {
-        (URL(url).openConnection() as? HttpURLConnection)?.run {
+        openUrlConnection(url)?.run {
             try {
                 return@withContext rssParser
                     .parseInput(inputStream)
@@ -43,6 +44,14 @@ class DefaultRssReader @Inject constructor(
         }
 
         throw RssParserError.ConnectionError
+    }
+
+    private fun openUrlConnection(url: String): HttpURLConnection? {
+        return try {
+            URL(url).openConnection() as? HttpURLConnection
+        } catch (exception: MalformedURLException) {
+            throw RssParserError.InvalidUrl
+        }
     }
 
     private fun List<XmlRssItem>.mapAndFilterEmptyFields() = map { xmlListItem ->
