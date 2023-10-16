@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Pull Requests check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
