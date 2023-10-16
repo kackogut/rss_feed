@@ -11,7 +11,8 @@ import kotlinx.coroutines.test.runCurrent
 @OptIn(ExperimentalCoroutinesApi::class)
 fun <T : Any> TestScope.assertStateFlowValues(
     stateFlow: Flow<T>,
-    checkBlock: () -> Unit,
+    checkBlock: () -> Unit = {},
+    emitBlock: suspend () -> Unit = {},
     assertBlock: (states: List<T>) -> Unit
 ) {
     val states = mutableListOf<T>()
@@ -22,24 +23,11 @@ fun <T : Any> TestScope.assertStateFlowValues(
     checkBlock.invoke()
     runCurrent()
 
-    assertBlock.invoke(states)
-    job.cancel()
-}
-
-@OptIn(ExperimentalCoroutinesApi::class)
-fun <T : Any> TestScope.assertStateFlowLastValue(
-    stateFlow: Flow<T>,
-    checkBlock: () -> Unit,
-    assertBlock: (state: T) -> Unit
-) {
-    val states = mutableListOf<T>()
-    val job = launch(UnconfinedTestDispatcher()) {
-        stateFlow.toList(states)
+    launch(UnconfinedTestDispatcher()) {
+        emitBlock.invoke()
     }
-
-    checkBlock.invoke()
     runCurrent()
 
-    assertBlock.invoke(states.last())
+    assertBlock.invoke(states)
     job.cancel()
 }

@@ -11,10 +11,14 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
 import javax.inject.Inject
 
-class SubscribeToRssFeedFromUrlUseCase @Inject constructor(
+interface SubscribeToRssFeedFromUrlUseCase {
+    fun execute(url: String): Flow<Result<List<RssFeedItemData>>>
+}
+
+class DefaultSubscribeToRssFeedFromUrlUseCase @Inject constructor(
     private val rssRepository: RssRepository
-) {
-    fun execute(url: String): Flow<Result<List<RssFeedItemData>>> = flow {
+) : SubscribeToRssFeedFromUrlUseCase {
+    override fun execute(url: String): Flow<Result<List<RssFeedItemData>>> = flow {
         while (currentCoroutineContext().isActive) {
             try {
                 emit(Result.success(rssRepository.parseRssUrl(url).map { it.toDomainModel() }))

@@ -1,6 +1,5 @@
 package com.example.rssfeed.feature.rss_reader.list
 
-import com.example.rss_domain.SubscribeToRssFeedFromUrlUseCase
 import com.example.rss_domain.model.RssParseErrorData
 import com.example.rss_domain_test.model.RssFeedItemDataGenerator
 import com.example.rssfeed.feature.rss_reader.list.model.RssParserErrorDisplay
@@ -8,14 +7,11 @@ import com.example.rssfeed.feature.rss_reader.model.RssDisplayMapperUtils
 import com.example.rssfeed.utils.MainCoroutineRule
 import com.example.rssfeed.utils.assertStateFlowValues
 import com.google.common.truth.Truth.assertThat
-import io.mockk.every
-import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,7 +19,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 internal class RssListViewModelTest {
 
-    private val subscribeToRssFeedFromUrlUseCase = mockk<SubscribeToRssFeedFromUrlUseCase>()
+    private val subscribeToRssFeedFromUrlUseCase = MockSubscribeToRssFeedUseCase()
 
     private lateinit var viewModel: RssListViewModel
 
@@ -38,6 +34,11 @@ internal class RssListViewModelTest {
         )
     }
 
+    @After
+    fun clear() {
+        subscribeToRssFeedFromUrlUseCase.clear()
+    }
+
     @Test
     fun `WHEN viewModel is initialized THEN should post Loading state`() {
         assertThat(viewModel.state.value).isEqualTo(RssListState.Loading)
@@ -47,13 +48,15 @@ internal class RssListViewModelTest {
     fun `GIVEN that for given URL subscription returns ConnectionError error WHEN viewModel is initialized THEN should post Loading state`() =
         runTest {
             val url = "url"
-            every { subscribeToRssFeedFromUrlUseCase.execute(url) } returns flow {
-                throw RssParseErrorData.ConnectionError
-            }
 
             assertStateFlowValues(
                 stateFlow = viewModel.state,
                 checkBlock = { viewModel.getRssFeed(url) },
+                emitBlock = {
+                    subscribeToRssFeedFromUrlUseCase.addValue(
+                        Result.failure(RssParseErrorData.ConnectionError)
+                    )
+                },
                 assertBlock = { states ->
                     assertThat(states[0]).isEqualTo(RssListState.Loading)
 
@@ -71,13 +74,15 @@ internal class RssListViewModelTest {
         runTest {
             val url = "url"
             val domainModel = RssFeedItemDataGenerator.rssListItemData()
-            every { subscribeToRssFeedFromUrlUseCase.execute(url) } returns flowOf(
-                Result.success(listOf(domainModel))
-            )
 
             assertStateFlowValues(
                 stateFlow = viewModel.state,
                 checkBlock = { viewModel.getRssFeed(url) },
+                emitBlock = {
+                    subscribeToRssFeedFromUrlUseCase.addValue(
+                        Result.success(listOf(domainModel))
+                    )
+                },
                 assertBlock = { states ->
                     assertThat(states[0]).isEqualTo(RssListState.Loading)
 
@@ -104,17 +109,18 @@ internal class RssListViewModelTest {
                 title = "second"
             )
 
-            every { subscribeToRssFeedFromUrlUseCase.execute(url) } returns flow {
-                emit(Result.success(listOf(domainModel)))
-
-                delay(5000)
-
-                emit(Result.success(listOf(domainModel, secondDomainModel)))
-            }
-
             assertStateFlowValues(
                 stateFlow = viewModel.state,
                 checkBlock = { viewModel.getRssFeed(url) },
+                emitBlock = {
+                    subscribeToRssFeedFromUrlUseCase.apply {
+                        addValue(Result.success(listOf(domainModel)))
+
+                        delay(500)
+
+                        addValue(Result.success(listOf(domainModel, secondDomainModel)))
+                    }
+                },
                 assertBlock = { states ->
                     assertThat(states[0]).isEqualTo(RssListState.Loading)
 
@@ -155,17 +161,18 @@ internal class RssListViewModelTest {
             val url = "url"
             val domainModel = RssFeedItemDataGenerator.rssListItemData()
 
-            every { subscribeToRssFeedFromUrlUseCase.execute(url) } returns flow {
-                emit(Result.success(listOf(domainModel)))
-
-                delay(5000)
-
-                throw RssParseErrorData.ConnectionError
-            }
-
             assertStateFlowValues(
                 stateFlow = viewModel.state,
                 checkBlock = { viewModel.getRssFeed(url) },
+                emitBlock = {
+                    subscribeToRssFeedFromUrlUseCase.apply {
+                        addValue(Result.success(listOf(domainModel)))
+
+                        delay(5_000)
+
+                        addValue(Result.failure(RssParseErrorData.ConnectionError))
+                    }
+                },
                 assertBlock = { states ->
                     assertThat(states[0]).isEqualTo(RssListState.Loading)
 

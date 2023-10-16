@@ -20,7 +20,7 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SubscribeToRssFeedFromUrlUseCaseTest {
+class DefaultSubscribeToRssFeedFromUrlUseCaseTest {
 
     private val rssRepository = mockk<RssRepository>()
 
@@ -28,7 +28,7 @@ class SubscribeToRssFeedFromUrlUseCaseTest {
 
     @Before
     fun setup() {
-        useCase = SubscribeToRssFeedFromUrlUseCase(rssRepository)
+        useCase = DefaultSubscribeToRssFeedFromUrlUseCase(rssRepository)
     }
 
     @Test
