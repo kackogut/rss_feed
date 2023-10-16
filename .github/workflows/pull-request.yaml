@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Pull Requests check
-    runs-on: mac-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3
@@ -21,8 +21,8 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Change wrapper permissions
-        run: chmod +x ./gradlew
+      - name: Run tests
+        run: ./gradlew testDebugUnitTest
 
       - name: Build with Gradle
         run: ./gradlew build
