@@ -7,16 +7,20 @@ import com.example.rssfeed.feature.rss_reader.list.model.RssParserErrorDisplay
 import com.example.rssfeed.feature.rss_reader.model.RssDisplayMapperUtils
 import com.example.rssfeed.utils.MainCoroutineRule
 import com.example.rssfeed.utils.assertStateFlowValues
+import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 internal class RssListViewModelTest {
 
     private val subscribeToRssFeedFromUrlUseCase = mockk<SubscribeToRssFeedFromUrlUseCase>()
@@ -36,7 +40,7 @@ internal class RssListViewModelTest {
 
     @Test
     fun `WHEN viewModel is initialized THEN should post Loading state`() {
-        assert(viewModel.state.value == RssListState.Loading)
+        assertThat(viewModel.state.value).isEqualTo(RssListState.Loading)
     }
 
     @Test
@@ -51,10 +55,10 @@ internal class RssListViewModelTest {
                 stateFlow = viewModel.state,
                 checkBlock = { viewModel.getRssFeed(url) },
                 assertBlock = { states ->
-                    assert(states[0] == RssListState.Loading)
+                    assertThat(states[0]).isEqualTo(RssListState.Loading)
 
-                    assert(
-                        states[1] == RssListState.Error(
+                    assertThat(states[1]).isEqualTo(
+                        RssListState.Error(
                             connectionError = RssParserErrorDisplay.ConnectionError
                         )
                     )
@@ -63,7 +67,7 @@ internal class RssListViewModelTest {
         }
 
     @Test
-    fun `GIVEN that for given URL subscription returns rss list WHEN viewModel is initialized THEN should post Data state`() =
+    fun `GIVEN that for given URL subscription returns rss list WHEN getRssFeed is called THEN should post Data state`() =
         runTest {
             val url = "url"
             val domainModel = RssFeedItemDataGenerator.rssListItemData()
@@ -77,16 +81,112 @@ internal class RssListViewModelTest {
                 stateFlow = viewModel.state,
                 checkBlock = { viewModel.getRssFeed(url) },
                 assertBlock = { states ->
-                    assert(states[0] == RssListState.Loading)
+                    assertThat(states[0]).isEqualTo(RssListState.Loading)
 
-                    assert(
-                        states[1] == RssListState.Data(
+                    assertThat(states[1]).isEqualTo(
+                        RssListState.Data(
                             list = listOf(
                                 RssDisplayMapperUtils.expectedListItemFromDomainModel(
                                     domainModel = domainModel,
                                     id = 0
                                 )
                             )
+                        )
+                    )
+                }
+            )
+        }
+
+    @Test
+    fun `GIVEN that for given URL subscription updates rss list WHEN viewModel is getRssFeed is called THEN should post Data state`() =
+        runTest {
+            val url = "url"
+            val domainModel = RssFeedItemDataGenerator.rssListItemData()
+            val secondDomainModel = RssFeedItemDataGenerator.rssListItemData(
+                title = "second"
+            )
+
+            every { subscribeToRssFeedFromUrlUseCase.execute(url) } returns flow {
+                emit(listOf(domainModel))
+
+                delay(5000)
+
+                emit(listOf(domainModel, secondDomainModel))
+            }
+
+            assertStateFlowValues(
+                stateFlow = viewModel.state,
+                checkBlock = { viewModel.getRssFeed(url) },
+                assertBlock = { states ->
+                    assert(states[0] == RssListState.Loading)
+
+                    assertThat(states[1]).isEqualTo(
+                        RssListState.Data(
+                            list = listOf(
+                                RssDisplayMapperUtils.expectedListItemFromDomainModel(
+                                    domainModel = domainModel,
+                                    id = 0
+                                )
+                            )
+                        )
+                    )
+
+                    advanceUntilIdle()
+
+                    assertThat(states[2]).isEqualTo(
+                        RssListState.Data(
+                            list = listOf(
+                                RssDisplayMapperUtils.expectedListItemFromDomainModel(
+                                    domainModel = domainModel,
+                                    id = 0
+                                ),
+                                RssDisplayMapperUtils.expectedListItemFromDomainModel(
+                                    domainModel = secondDomainModel,
+                                    id = 1
+                                )
+                            )
+                        )
+                    )
+                }
+            )
+        }
+
+    @Test
+    fun `GIVEN that for given URL subscription updates with error WHEN viewModel is getRssFeed is called THEN should post Error state`() =
+        runTest {
+            val url = "url"
+            val domainModel = RssFeedItemDataGenerator.rssListItemData()
+
+            every { subscribeToRssFeedFromUrlUseCase.execute(url) } returns flow {
+                emit(listOf(domainModel))
+
+                delay(5000)
+
+                throw RssParseErrorData.ConnectionError
+            }
+
+            assertStateFlowValues(
+                stateFlow = viewModel.state,
+                checkBlock = { viewModel.getRssFeed(url) },
+                assertBlock = { states ->
+                    assert(states[0] == RssListState.Loading)
+
+                    assertThat(states[1]).isEqualTo(
+                        RssListState.Data(
+                            list = listOf(
+                                RssDisplayMapperUtils.expectedListItemFromDomainModel(
+                                    domainModel = domainModel,
+                                    id = 0
+                                )
+                            )
+                        )
+                    )
+
+                    advanceUntilIdle()
+
+                    assertThat(states[2]).isEqualTo(
+                        RssListState.Error(
+                            connectionError = RssParserErrorDisplay.ConnectionError
                         )
                     )
                 }

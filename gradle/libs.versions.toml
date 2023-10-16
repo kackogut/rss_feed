@@ -15,6 +15,7 @@ coroutines = "1.7.3"
 junit = "4.13.2"
 junitExt = "1.1.5"
 mockk = "1.13.8"
+truth = "1.1.5"
 
 [libraries]
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
@@ -38,6 +39,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
 
 [bundles]
 compose = [
@@ -45,4 +47,11 @@ compose = [
     "compose-ui-graphics",
     "compose-material3",
     "compose-ui-tooling-preview"
+]
+unitTest = [
+    "junit",
+    "junit-ext",
+    "coroutines-test",
+    "mockk",
+    "truth"
 ]
